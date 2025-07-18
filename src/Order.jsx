@@ -18,8 +18,12 @@ let price, selectedPizza;
 
 if(!loading){
   selectedPizza = pizzaTypes.find((pizza) => pizzaType === pizza.id);
+  console.log(selectedPizza.sizes)
+  price = intl.format(selectedPizza.sizes[pizzaSize])
 }
 async function fetchPizzasTypes() {
+  // await new Promise((resolve) => setTimeout(resolve, 10000)); // Simulate network delay
+
   const pizzaResponse = await fetch("/api/pizzas");
   const pizzaJson = await pizzaResponse.json();
   setPizzasTypes(pizzaJson);
@@ -90,12 +94,15 @@ useEffect(() => {
           <button type="submit">Add to Cart</button>
         </div>
         <div className="order-pizza">
+          {loading ? <h1>Loading...</h1> : 
           <Pizza
-            name="Pepperoni"
-            description="Mozzarella Cheese, Pepperoni"
-            image="/public/pizzas/pepperoni.webp"
+            name={selectedPizza.name}
+            description={selectedPizza.description}
+            image={selectedPizza.image}
           />
-          <p>$13.37</p>
+          }
+          
+          <p>{price}</p>
         </div>
       </form>
     </div>
